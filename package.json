@@ -1,0 +1,24 @@
+{
+  "name": "cryptolio",
+  "version": "1.0.0",
+  "description": "crypto portfolio tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mvrcosi/cryptolio.git"
+  },
+  "author": "Marcos Saucedo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mvrcosi/cryptolio/issues"
+  },
+  "homepage": "https://github.com/Mvrcosi/cryptolio#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "mongoose": "^6.2.2"
+  }
+}
