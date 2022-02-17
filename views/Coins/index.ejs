@@ -1,0 +1,18 @@
+<% layout('layouts/boilerplate')%>
+    <h1> ALL COINS </h1>
+    <div>
+        <a href="/coins/new">Add coin</a>
+    </div>
+    <ul>
+        <% for(let coin of coins){ %>
+            <li>
+                <a href="/coins/<%= coin._id %>">
+                    <%= coin.coinName %>
+                </a>
+            </li>
+            <% } %>
+    </ul>
+
+    </body>
+
+    </html>
