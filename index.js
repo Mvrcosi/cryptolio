@@ -5,6 +5,11 @@ const dotenv = require('dotenv')
 const ejsMate = require('ejs-mate')
 const methodOverride = require('method-override')
 const Coin = require('./models/coin')
+const User = require('./models/user')
+const passport = require('passport')
+const Localstrategy = require('passport-local')
+
+
 
 const app = express()
 
@@ -16,8 +21,16 @@ app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+// app.use(passport.initialize())
+// app.use(passport.session())
+// passport.use(new Localstrategy(User.authenticate()))
+// passport.serializeUser(User.serializeUser())
+// passport.deserializeUser(User.deserializeUser())
+
+
 
 mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
@@ -34,9 +47,6 @@ app.get('/', (req, res) => {
     res.render('home')
 
 })
-
-
-
 
 
 app.get('/coins', async (req, res) => {
@@ -79,7 +89,7 @@ app.put('/coins/:id', async (req, res) => {
 })
 
 app.delete('/coins/:id', async (req, res) => {
-    const { id } = req.params 
+    const { id } = req.params
     await Coin.findByIdAndDelete(id)
     res.redirect(`/coins`)
 
