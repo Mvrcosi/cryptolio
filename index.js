@@ -4,34 +4,44 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 const ejsMate = require('ejs-mate')
 const methodOverride = require('method-override')
-const Coin = require('./models/coin')
-const User = require('./models/user')
 const passport = require('passport')
 const Localstrategy = require('passport-local')
 const session = require('express-session')
 const flash = require('connect-flash')
-
 const sessionOptions = { secret: "secret", resave: false, saveUninitialized: false }
-
+const bodyParser = require('body-parser')
 const app = express()
+
+const Coin = require('./models/coin')
+const User = require('./models/user')
+
+// ROUTES
+
+const userRoutes = require('./routes/users')
+
+
+
 
 dotenv.config()
 const PORT = process.env.PORT || 5000;
-
 
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(flash())
+
 app.use(session(sessionOptions))
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
-// app.use(passport.initialize())
-// app.use(passport.session())
-// passport.use(new Localstrategy(User.authenticate()))
-// passport.serializeUser(User.serializeUser())
-// passport.deserializeUser(User.deserializeUser())
+
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new Localstrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 
 
@@ -44,11 +54,11 @@ mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnified
 
 
 
+app.use('/', userRoutes)
+
 
 app.get('/', (req, res) => {
-
     res.render('home')
-
 })
 
 
