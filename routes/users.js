@@ -36,7 +36,7 @@ router.get('/canvas', isLoggedIn, (req, res) => {
 })
 
 
-router.post('/canvas', (req, res) => {
+router.post('/canvas/:id/coin', (req, res) => {
     const { coinName, quantityPurchased, purchasePrice, purchaseFee } = req.body
     const coin = new Coin({ coinName, quantityPurchased, purchasePrice, purchaseFee })
     coin.save()
@@ -46,4 +46,4 @@ router.post('/canvas', (req, res) => {
 })
 
 
-module.exports = router;
+module.exports = router; 

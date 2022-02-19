@@ -8,8 +8,14 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }
-})
+    },
+    transactions: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Coin"
+        }
+    ]
+}) 
 
 UserSchema.plugin(passportLocalMongoose);
 

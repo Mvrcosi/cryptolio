@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 
 const CoinSchema = new Schema({
-
     coinName: String,
     quantityPurhcased: Number,
     purchasePrice: Number,
@@ -11,4 +10,4 @@ const CoinSchema = new Schema({
 
 })
 
-module.exports = mongoose.model("Coin", CoinSchema)
+module.exports = mongoose.model("Coin", CoinSchema) 
