@@ -5,8 +5,9 @@ const Schema = mongoose.Schema;
 const CoinSchema = new Schema({
 
     coinName: String,
-    coinPurchasePrice: Number,
-    purchaseAmount: Number
+    quantityPurhcased: Number,
+    purchasePrice: Number,
+    purchaseFee: Number
 
 })
 

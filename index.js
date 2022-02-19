@@ -35,8 +35,8 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
-app.use(bodyParser.json()); 
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new Localstrategy(User.authenticate()))
