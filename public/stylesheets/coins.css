@@ -1,0 +1,18 @@
+
+
+.main-section {
+    height: 100%;
+}
+h1 {
+    text-align: center;
+}
+
+.coin-section {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgb(240, 241, 242);
+}
+
+.coin-info {
+    display: flex;
+}

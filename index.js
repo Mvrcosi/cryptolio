@@ -11,13 +11,19 @@ const flash = require('connect-flash')
 const sessionOptions = { secret: "secret", resave: false, saveUninitialized: false }
 const bodyParser = require('body-parser')
 const app = express()
-
+const ExpressError = require('./utils/ExpressError')
+const Joi = require('joi')
 const Coin = require('./models/coin')
 const User = require('./models/user')
+const { isLoggedIn } = require('./middleware')
+const catchAsync = require('./utils/catchAsync.js')
+const user = require('./models/user')
+const { findById } = require('./models/coin')
+
 
 // ROUTES
 
-const userRoutes = require('./routes/users')
+// const userRoutes = require('./routes/users')
 
 
 
@@ -45,6 +51,14 @@ passport.deserializeUser(User.deserializeUser())
 
 
 
+app.use((req,res,next) => {
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error')
+    next()
+
+})
+
 mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('connected to DB')
@@ -54,67 +68,77 @@ mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnified
 
 
 
-app.use('/', userRoutes)
+   
+
+
+
+// app.use('/', userRoutes)
+
+
+app.get('/register', async (req, res) => {
+
+    res.render('users/register')
+
+})
+
+app.post('/register', async (req, res, next) => {
+    const { email, username, password } = req.body
+    const user = new User({ email, username })
+    const registeredUser = await User.register(user, password);
+    req.login(registeredUser, err => {
+        if(err) return next(err)
+        req.flash('success', 'Welcome to cryptolio')
+        res.redirect('/canvas')
+    })
+    
+})
+
+app.get('/login', (req, res) => {
+    res.render('users/login')
+})
+
+
+app.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
+    res.redirect('/canvas')
+
+})
+
+app.get("/logout", (req,res) => {
+    req.logOut();
+    res.redirect('/')
+
+})
+
+
+app.get('/canvas', isLoggedIn, async(req, res) => {
+
+    const getUser = await User.findById(req.user._id)
+    res.render('coins/canvas' , {getUser})
+    
+    
+
+})
+
+
+
+app.post('/canvas', isLoggedIn, catchAsync(async(req, res) => {
+        const { coinName, quantityPurchased, purchasePrice, purchaseFee } = req.body
+        const newCoin = {coinName, quantityPurchased, purchasePrice, purchaseFee}
+        const user = await User.findById(req.user._id)
+        user.save()
+       res.redirect('/canvas')
+}))
+
+
 
 
 app.get('/', (req, res) => {
     res.render('home')
 })
 
-
-// app.get('/coins', async (req, res) => {
-
-//     const coins = await Coin.find({})
-//     res.render('coins/index', { coins })
-
-// })
-
-// app.get('/coins/new', async (req, res) => {
-//     res.render('coins/new')
-
-// })
-
-// app.post('/coins', async (req, res) => {
-
-//     const coin = new Coin(req.body.coin)
-//     await coin.save()
-//     res.redirect(`/coins/${coin._id}`)
-
-// })
-
-// app.get('/coins/:id', async (req, res) => {
-//     const coin = await Coin.findById(req.params.id)
-//     res.render('coins/show', { coin })
-
-// })
-
-// app.get('/coins/:id/edit', async (req, res) => {
-//     const coin = await Coin.findById(req.params.id)
-
-//     res.render('coins/edit', { coin })
-
-// })
-
-// app.put('/coins/:id', async (req, res) => {
-//     const { id } = req.params
-//     const coin = await Coin.findByIdAndUpdate(id, { ...req.body.coin }, { new: true })
-//     res.redirect(`/coins/${coin._id}`)
-// })
-
-// app.delete('/coins/:id', async (req, res) => {
-//     const { id } = req.params
-//     await Coin.findByIdAndDelete(id)
-//     res.redirect(`/coins`)
-
-// })
-
-
-
-
-
-
-
-
+app.all('*', (req,res,next) => {
+    next(new ExpressError('Page Not Found', 404))
+})
 
 
 app.listen(PORT, () => {

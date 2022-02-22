@@ -5,13 +5,73 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <button type="button" class="btn btn-outline-light mx-auto" >
-                <a href="login">SIGN IN / SIGN UP</a> 
-            </button>
+            <a class="navbar-brand" href="#">Cryptolio</a>
         </div>
-
+        <div class="navbar-nav ml-auto">
+        <% if(!currentUser) {%>
+            <a class="nav-link" href='/login'>Login</a>
+            <a class="nav-link" href='/register'>Register</a>
+            <% } else { %>`
+                <button type="button" class="btn btn-outline-light " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    ADD COIN
+                </button>
+            <a class="nav-link" href="/logout">Logout</a>
+            <%}%>
+        </div>
     </div>
 </nav>
 
 
 
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <form action="/canvas" method="POST"  novalidate class='validated-form'>
+                    <label for="coinList" class="form-label">Choose Coin</label>
+                    <input class="form-control" list="datalistOptions" id="coinList" placeholder="Type to search..."
+                        name="coinName" required>
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+
+                    <datalist id="datalistOptions">
+                    </datalist>
+
+                    <label for="quantityPurchased" class="form-label">Quantity Purchased</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">0.00</span>
+                        <input type="text" class="form-control" id="quanitity" name="quantityPurchased">
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+                    </div>
+
+                    <label for="quantityPurchased" class="form-label">Purchase Price</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" placeholder="0.00"
+                            aria-label="Amount (to the nearest dollar)" id="purchasePrice" name="purchasePrice">
+                            <div class="valid-feedback">
+                                Looks Good!
+                            </div>
+                    </div>
+
+                    <label for="quantityPurchased" class="form-label">Fee</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" placeholder="0.00"
+                            aria-label="Amount (to the nearest dollar)" id="purchaseFee" name="purchaseFee">
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Transaction</button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

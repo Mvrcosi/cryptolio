@@ -3,10 +3,21 @@ const Schema = mongoose.Schema;
 
 
 const CoinSchema = new Schema({
-    coinName: String,
-    quantityPurhcased: Number,
-    purchasePrice: Number,
-    purchaseFee: Number
+    coinName: {
+        type: String,
+        required: true
+    },
+    quantityPurchased: {
+        type: Number,
+        required: true
+    },
+    purchasePrice: {
+        type: Number,
+        required: true
+    },
+    purchaseFee: {
+        type:'Number',
+    }
 
 })
 

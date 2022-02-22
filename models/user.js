@@ -11,8 +11,21 @@ const UserSchema = new Schema({
     },
     transactions: [
         {
-            type: Schema.Types.ObjectId,
-            ref: "Coin"
+            coinName: {
+                type: String,
+                required: true
+            },
+            quantityPurchased: {
+                type: Number,
+                required: true
+            },
+            purchasePrice: {
+                type: Number,
+                required: true
+            },
+            purchaseFee: {
+                type:'Number',
+            }
         }
     ]
 }) 
