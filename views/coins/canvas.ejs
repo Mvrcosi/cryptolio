@@ -32,16 +32,33 @@
                 </p>
             </div>
                 <div>
-                    <%= getUser.transactions[i].purchasePrice %>
+                    <h6>Current Price</h6>
+                    <p class='current-price'>
+                        <%= getUser.transactions[i].quantityPurchased%>
+                    </p>
                 </div>
                 <div>
-                    <%= getUser.transactions[i].purchaseFee %>
+                    <h6>Holdings</h6>
+                    <p class='quantity-purchased'>
+                        <%= getUser.transactions[i].quantityPurchased%>
+                    </p>
+                </div>
+                <div>
+                    <h6>Profit/Loss</h6>
+                    <p class='purchase-price'style="display: none;">
+                       <%=  getUser.transactions[i].purchasePrice   %>
+                    </p>
+                    <p class='purchase-fee'style="display: none;">
+                        <%=  getUser.transactions[i].purchaseFee   %>
+                     </p>
+                    <p class='profit-loss'>
+                    </p>
 
                 </div>
 
-            <div>
-                <button>EDIT</button>
-                <button>DELETE</button>
+            <div class="coin-buttons">
+                <button class="btn btn-info">EDIT</button>
+                <button class="btn btn-danger">DELETE</button>
 
             </div>
         </div>

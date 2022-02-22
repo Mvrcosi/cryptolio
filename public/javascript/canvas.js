@@ -320,10 +320,12 @@ else if(window.document.location.pathname === '/canvas') {
     const coinImage = document.querySelectorAll('img')
     const coin = document.querySelector('.coin')
     const coinName = document.querySelectorAll('.coin-name')
+    const currentPrice = document.querySelectorAll('.current-price')
+    const profitLoss = document.querySelectorAll('.profit-loss')
+    const purchaseFee= document.querySelectorAll('.purchase-fee')
+    const purchasePrice = document.querySelectorAll('.purchase-price')
+    const quantityPurchased = document.querySelectorAll('.quantity-purchased')
 
-// console.log(coinImage)
-
-   
     if(coinName.length > 0) {
     getCoins().then((res) => {
       
@@ -332,25 +334,21 @@ else if(window.document.location.pathname === '/canvas') {
             for(let j = 0; j< coinName.length; j++) {
                 if(res.data[i].name.toLowerCase() === coinName[j].innerText.toLowerCase()) {
 
-                    // for(let k = 0; k < coinImage.length; k++ ) {
-                    //     coinImage[k].src = res.data[i].image
-                    // }
-                    // console.log(res.data[i].image)
-                    // console.log(coinImage[i])
-                    // console.log(coinImage[j])
-
                     coinImage[j].src = res.data[i].image
-
                     for(let k = 0; k < coinImage.length; k++) {
-                        // coinImage[k].src = res.data[i].image
-                        // console.log(res.data[i])
                     }
-                    // console.log(coinImage)
+
+                    // LEFT OFF HERE/ JUST CAST THE TEXT TO INTS ANC CALCUALTE IT THAT WAY
+                    currentPrice[j].innerText =` $${res.data[i].current_price.toLocaleString()}`
+
+    
+                    profitLoss[j].innerText = `${purchasePrice[j].innerText + res.data[i].current_price}`
+
                 }
-
             }
-
         }
+
+
     })
 }
   

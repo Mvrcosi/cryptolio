@@ -26,9 +26,10 @@
 
 .coin-info {
     display: flex;
+    border-radius: 10px;
     justify-content: space-between;
     align-items: center;
-    margin: 0 auto;
+    margin: 10px auto;
     width: 80%;
     border-bottom: 3px solid grey;
     background-color: rgb(222, 222, 223);
@@ -37,5 +38,20 @@
 .coin-info:last-of-type{
     border-bottom: none;
 }
-/*   
-            </div> */
+
+.coin {
+    display: flex;
+    width: 20%;
+}
+
+.coin-buttons {
+    margin-right: 5px;
+}
+.coin img {
+    height: 30px;
+    margin-left: 5px;
+}
+.coin p {
+    padding-top: 5px;
+    padding-left: 5px
+}
