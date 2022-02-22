@@ -326,24 +326,38 @@ else if(window.document.location.pathname === '/canvas') {
     const purchasePrice = document.querySelectorAll('.purchase-price')
     const quantityPurchased = document.querySelectorAll('.quantity-purchased')
 
+
+    function getDifference(a,b) {
+        return Math.abs(a-b)
+    }
     if(coinName.length > 0) {
     getCoins().then((res) => {
       
         for(let i =0; i < res.data.length; i++) {
            
-            for(let j = 0; j< coinName.length; j++) {
+            for(let j = 0; j < coinName.length; j++) {
                 if(res.data[i].name.toLowerCase() === coinName[j].innerText.toLowerCase()) {
 
                     coinImage[j].src = res.data[i].image
                     for(let k = 0; k < coinImage.length; k++) {
                     }
 
-                    // LEFT OFF HERE/ JUST CAST THE TEXT TO INTS ANC CALCUALTE IT THAT WAY
-                    currentPrice[j].innerText =` $${res.data[i].current_price.toLocaleString()}`
+                    let fee = parseInt(purchaseFee[j].innerText)
+                    let price = purchasePrice[j].innerText
+                    let quantity = quantityPurchased[j].innerText
+                    let currentCoinPrice = res.data[i].current_price
+                    let buyPrice =  parseInt(price) + parseInt(fee)
 
-    
-                    profitLoss[j].innerText = `${purchasePrice[j].innerText + res.data[i].current_price}`
 
+                    let totalChange = ( currentCoinPrice - buyPrice) * quantity
+
+
+
+
+                    currentPrice[j].innerText =` $${currentCoinPrice.toLocaleString()}`
+                    profitLoss[j].innerText =` $${totalChange.toLocaleString()}`
+
+           
                 }
             }
         }

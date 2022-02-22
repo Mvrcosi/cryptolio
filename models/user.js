@@ -25,6 +25,7 @@ const UserSchema = new Schema({
             },
             purchaseFee: {
                 type:'Number',
+                required: true
             }
         }
     ]
