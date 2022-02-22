@@ -353,9 +353,17 @@ else if(window.document.location.pathname === '/canvas') {
 
 
 
-
                     currentPrice[j].innerText =` $${currentCoinPrice.toLocaleString()}`
-                    profitLoss[j].innerText =` $${totalChange.toLocaleString()}`
+                    
+                    profitLoss[j].innerText =`$${totalChange.toLocaleString()}`
+
+                    if(totalChange > 0) {
+                    profitLoss[j].style.color = 'green'
+                    } 
+                    else {
+                    profitLoss[j].style.color = 'red'
+
+                    }
 
            
                 }
