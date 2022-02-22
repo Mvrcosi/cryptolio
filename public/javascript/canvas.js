@@ -315,7 +315,43 @@ getCoins().then((res) => {
 })
 
 }
-else {
-console.log(window.location.pathname)
+else if(window.document.location.pathname === '/canvas') {
 
+    const coinImage = document.querySelectorAll('img')
+    const coin = document.querySelector('.coin')
+    const coinName = document.querySelectorAll('.coin-name')
+
+// console.log(coinImage)
+
+   
+    if(coinName.length > 0) {
+    getCoins().then((res) => {
+      
+        for(let i =0; i < res.data.length; i++) {
+           
+            for(let j = 0; j< coinName.length; j++) {
+                if(res.data[i].name.toLowerCase() === coinName[j].innerText.toLowerCase()) {
+
+                    // for(let k = 0; k < coinImage.length; k++ ) {
+                    //     coinImage[k].src = res.data[i].image
+                    // }
+                    // console.log(res.data[i].image)
+                    // console.log(coinImage[i])
+                    // console.log(coinImage[j])
+
+                    coinImage[j].src = res.data[i].image
+
+                    for(let k = 0; k < coinImage.length; k++) {
+                        // coinImage[k].src = res.data[i].image
+                        // console.log(res.data[i])
+                    }
+                    // console.log(coinImage)
+                }
+
+            }
+
+        }
+    })
+}
+  
 }

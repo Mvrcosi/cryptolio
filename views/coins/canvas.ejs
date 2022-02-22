@@ -25,17 +25,17 @@
 
         <% for(let i = 0; i < getUser.transactions.length; i++)  {%>
         <div class="coin-info">
-            <div>
-                <img src="" alt="">
-                <p>
+            <div class ='coin'>
+                <img>
+                <p class='coin-name'>
                     <%= getUser.transactions[i].coinName %>
                 </p>
             </div>
                 <div>
-                    <%= getUser.transactions[i].coinName %>
+                    <%= getUser.transactions[i].purchasePrice %>
                 </div>
                 <div>
-                    <%= getUser.transactions[i].coinName %>
+                    <%= getUser.transactions[i].purchaseFee %>
 
                 </div>
 
@@ -44,8 +44,6 @@
                 <button>DELETE</button>
 
             </div>
-
-
         </div>
         <%} %>
 
