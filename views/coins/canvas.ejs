@@ -2,50 +2,59 @@
 
 
 <% if( getUser.transactions.length ===0 ) { %>
-
     <div class="container-fluid no-transactions">
-
     <button type="button"  class='btn btn-light'data-bs-toggle="modal" data-bs-target="#exampleModal">
         ADD COIN
     </button>
-</div>
-
-
+    </div>
  <% } else { %>
 
 
-    <canvas>
-
-    </canvas>
+    <canvas></canvas>
 
 
     <div class="container-fluid main-section">
 
-            <button type="button"  class='btn btn-light'data-bs-toggle="modal" data-bs-target="#exampleModal">
-        ADD COIN
-    </button>
-    <h1>Main Portfolio</h1>
+        <div class='coin-section'>
+        <h1>Main Portfolio</h1>
+        <button type="button"  class='btn btn-light'data-bs-toggle="modal" data-bs-target="#exampleModal">
+            ADD COIN
+        </button>
+        </div>
 
 
-    <div class="container coin-section">
-            <% for(let i = 0; i < getUser.transactions.length; i++)  {%>
-            <div class="coin-info">
+        <% for(let i = 0; i < getUser.transactions.length; i++)  {%>
+        <div class="coin-info">
+            <div>
                 <img src="" alt="">
                 <p>
                     <%= getUser.transactions[i].coinName %>
                 </p>
+            </div>
+                <div>
+                    <%= getUser.transactions[i].coinName %>
+                </div>
+                <div>
+                    <%= getUser.transactions[i].coinName %>
 
+                </div>
+
+            <div>
+                <button>EDIT</button>
+                <button>DELETE</button>
 
             </div>
-        <div>Holding amount</div>
-        <div>Gain/Loss</div>
 
 
         </div>
-<%}%>
+        <%} %>
 
 
-</div>
+
+    </div>
+
+
+
 </div>
 
 

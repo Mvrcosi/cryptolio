@@ -11,17 +11,31 @@
     background-color: #101010;
 }
 
-h1 {
+.main-section h1 {
     text-align: center;
 }
+
+
 .coin-section {
     display: flex;
-    justify-content: space-evenly;
-    background-color: rgb(240, 241, 242);
-
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .coin-info {
-    background-color: red;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    width: 80%;
+    border-bottom: 3px solid grey;
+    background-color: rgb(222, 222, 223);
 }
+
+.coin-info:last-of-type{
+    border-bottom: none;
+}
+/*   
+            </div> */
