@@ -13,12 +13,9 @@ const bodyParser = require('body-parser')
 const app = express()
 const ExpressError = require('./utils/ExpressError')
 const Joi = require('joi')
-const Coin = require('./models/coin')
 const User = require('./models/user')
 const { isLoggedIn } = require('./middleware')
 const catchAsync = require('./utils/catchAsync.js')
-const user = require('./models/user')
-const { findById } = require('./models/coin')
 
 
 // ROUTES
@@ -125,6 +122,7 @@ app.post('/canvas', isLoggedIn, catchAsync(async(req, res) => {
         const { coinName, quantityPurchased, purchasePrice, purchaseFee } = req.body
         const newCoin = {coinName, quantityPurchased, purchasePrice, purchaseFee}
         const user = await User.findById(req.user._id)
+        user.transactions.push(newCoin)
         user.save()
        res.redirect('/canvas')
 }))

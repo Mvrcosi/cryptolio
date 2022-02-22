@@ -1,24 +1,54 @@
 <% layout('layouts/boilerplate') %>
 
 
+<% if( getUser.transactions.length ===0 ) { %>
+
+    <div class="container-fluid no-transactions">
+
+    <button type="button"  class='btn btn-light'data-bs-toggle="modal" data-bs-target="#exampleModal">
+        ADD COIN
+    </button>
+</div>
+
+
+ <% } else { %>
+
+
     <canvas>
 
     </canvas>
 
-    <h1>Holdings</h1>
 
-   
-    <% if(!getUser.transactions.length)  { %>
+    <div class="container-fluid main-section">
 
-<div> NOTHING TO SHOW </div>
+            <button type="button"  class='btn btn-light'data-bs-toggle="modal" data-bs-target="#exampleModal">
+        ADD COIN
+    </button>
+    <h1>Main Portfolio</h1>
 
-  <%  } else { %>
-    <% for(let i = 0; i < getUser.transactions.length; i++)  {%>
-        <div> <%= getUser.transactions[i].coinName %></div>
 
-    <%}%>
+    <div class="container coin-section">
+            <% for(let i = 0; i < getUser.transactions.length; i++)  {%>
+            <div class="coin-info">
+                <img src="" alt="">
+                <p>
+                    <%= getUser.transactions[i].coinName %>
+                </p>
+
+
+            </div>
+        <div>Holding amount</div>
+        <div>Gain/Loss</div>
+
+
+        </div>
 <%}%>
-    <script src="javascript/api.js"></script>
+
+
+</div>
+</div>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
@@ -30,3 +60,56 @@
 
 </html>
 
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <form action="/canvas" method="POST"  novalidate class='validated-form'>
+                    <label for="coinList" class="form-label">Choose Coin</label>
+                    <input class="form-control" list="datalistOptions" id="coinList" placeholder="Type to search..."
+                        name="coinName" required>
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+
+                    <datalist id="datalistOptions">
+                    </datalist>
+
+                    <label for="quantityPurchased" class="form-label">Quantity Purchased</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">0.00</span>
+                        <input type="text" class="form-control" id="quanitity" name="quantityPurchased">
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+                    </div>
+
+                    <label for="quantityPurchased" class="form-label">Purchase Price</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" placeholder="0.00"
+                            aria-label="Amount (to the nearest dollar)" id="purchasePrice" name="purchasePrice">
+                            <div class="valid-feedback">
+                                Looks Good!
+                            </div>
+                    </div>
+
+                    <label for="quantityPurchased" class="form-label">Fee</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" placeholder="0.00"
+                            aria-label="Amount (to the nearest dollar)" id="purchaseFee" name="purchaseFee">
+
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Transaction</button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<% } %>
