@@ -401,14 +401,14 @@ else if(window.document.location.pathname === '/canvas') {
         }
 
         name() {
-            context.font = `${this.radius / 3}px serif`;
+            context.font = `${this.radius / 4}px serif`;
             context.fillStyle = 'white';
             context.textAlign = 'center'
             context.fillText(this.coinName.toUpperCase(), this.x, this.y - this.radius / 2);
         }
         price() {
 
-            context.font = `${this.radius / 3.5}px serif`;
+            context.font = `${this.radius / 4}px serif`;
             context.fillStyle = this.profitColor;
             context.fillText(this.coinPrice, this.x, this.y + this.radius / 1.2);
         }
@@ -477,15 +477,15 @@ else if(window.document.location.pathname === '/canvas') {
                     for(let k = 0; k < coinImage.length; k++) {
                     }
 
-                    let fee = parseInt(purchaseFee[j].innerText)
-                    let price = purchasePrice[j].innerText
+                    let fee = purchaseFee[j].innerText
+                    let price = parseFloat(purchasePrice[j].innerText)
                     let quantity = quantityPurchased[j].innerText
                     let currentCoinPrice = res.data[i].current_price
-                    let buyPrice =  parseInt(price) + parseInt(fee)
 
+                    let buyPrice =  parseFloat(price) + parseFloat(fee)
 
-                    let totalChange = ( currentCoinPrice - buyPrice) * quantity
-                    let totalHolding= price * quantity + totalChange
+                    let totalChange = (currentCoinPrice - buyPrice) * quantity
+                    let totalHolding = (buyPrice  * quantity) + parseFloat(totalChange)
 
 
                     currentPrice[j].innerText =` $${currentCoinPrice.toLocaleString()}`
