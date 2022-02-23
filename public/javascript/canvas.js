@@ -373,7 +373,7 @@ else if(window.document.location.pathname === '/canvas') {
     
 
     class Bubble {
-        constructor(x, y, radius, sAngle, eAngle, coinName, coinPrice, coinImg, bubbleColor, coinImgSize) {
+        constructor(x, y, radius, sAngle, eAngle, coinName, coinPrice, coinImg, bubbleColor, coinImgSize, profitColor) {
             this.x = x;
             this.y = y;
             this.radius = radius;
@@ -389,6 +389,7 @@ else if(window.document.location.pathname === '/canvas') {
                 y: (Math.random() - 0.5) * 1
             };
             this.coinImgSize = coinImgSize;
+            this.profitColor = profitColor
 
 
         }
@@ -408,7 +409,7 @@ else if(window.document.location.pathname === '/canvas') {
         price() {
 
             context.font = `${this.radius / 3.5}px serif`;
-            context.fillStyle = 'white';
+            context.fillStyle = this.profitColor;
             context.fillText(this.coinPrice, this.x, this.y + this.radius / 1.2);
         }
         image() {
@@ -505,7 +506,7 @@ else if(window.document.location.pathname === '/canvas') {
 
                         let myImage = new Image()
                         myImage.src = `${res.data[i].image}`
-                        let radius = 50;
+                        let radius = 100;
                         let x = canvas.width /2;
                         let y = canvas.height /2 
                         let pi = 2 * Math.PI
@@ -514,12 +515,13 @@ else if(window.document.location.pathname === '/canvas') {
                         let coinImg = myImage;
                         let coinHoldings = `$${totalChange.toLocaleString()}`;
                         let bubbleColor = totalChange > 0 ? 'green' : 'red';
+                        let profitColor = totalChange > 0 ? 'green' : 'red';
                         let coinImgSize = radius;
 
 
             
             
-                     coinsArr.push(new Bubble(x, y, radius, sAngle, pi,coinNamee, coinHoldings, coinImg, bubbleColor, coinImgSize))
+                     coinsArr.push(new Bubble(x, y, radius, sAngle, pi,coinNamee, coinHoldings, coinImg, bubbleColor, coinImgSize, profitColor))
                         
                     }
                 }
