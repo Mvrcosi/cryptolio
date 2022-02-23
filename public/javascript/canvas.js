@@ -179,11 +179,7 @@ getCoins().then((res) => {
 
     }
 
-
-
     const coinsToRender = []
-
-
     for (let i = 0; i < coins.length; i++) {
 
         let radius = 0
@@ -273,11 +269,6 @@ getCoins().then((res) => {
             coinImgSize = radius
         }
 
-
-
-
-
-
         if (i !== 0) {
             for (let j = 0; j < coinsToRender.length; j++) {
                 if (distance(x, y, coinsToRender[j].x, coinsToRender[j].y) - radius * 2 < 0) {
@@ -293,29 +284,167 @@ getCoins().then((res) => {
 
         }
         coinsToRender.push(new Bubble(x, y, radius, angle, pi, coinName, coinCurrentPrice, coinImg, bubbleColor, coinImgSize))
-
     }
-
-
     function animate() {
         requestAnimationFrame(animate)
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-
         coinsToRender.forEach((coin, coinIndex) => {
-
             coin.update(coinsToRender)
-
         })
-
     }
-
     animate()
-
 })
 
 }
 else if(window.document.location.pathname === '/canvas') {
+
+
+
+    const canvas = document.querySelector('canvas')
+
+    const context = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    window.addEventListener('resize', function (e) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight
+    })
+
+
+
+    function distance(x1, y1, x2, y2) {
+        const xDist = x2 - x1;
+        const yDist = y2 - y1;
+
+        return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))
+    }
+
+    function randomIntFromRange(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+
+    }
+
+    function rotate(velocity, angle) {
+        const rotateVelocities = {
+            x: velocity.x * Math.cos(angle) - velocity.y * Math.sin(angle),
+            y: velocity.x * Math.sin(angle) + velocity.y * Math.cos(angle)
+        }
+
+        return rotateVelocities
+    }
+
+
+    function resolveCollision(particle, otherParticle) {
+        const xVelocityDiff = particle.velocity.x - otherParticle.velocity.x;
+        const yVelocityDiff = particle.velocity.y - otherParticle.velocity.y;
+
+        const xDist = otherParticle.x - particle.x;
+        const yDist = otherParticle.y - particle.y;
+
+        if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
+
+            const angle = -Math.atan2(otherParticle.y - particle.y, otherParticle.x - particle.x);
+
+            const m1 = particle.mass;
+            const m2 = otherParticle.mass;
+
+            const u1 = rotate(particle.velocity, angle);
+            const u2 = rotate(otherParticle.velocity, angle);
+
+            const v1 = { x: u1.x * (m1 - m2) / (m1 + m2) + u2.x * 2 * m2 / (m1 + m2), y: u1.y };
+            const v2 = { x: u2.x * (m1 - m2) / (m1 + m2) + u1.x * 2 * m2 / (m1 + m2), y: u2.y };
+
+            const vFinal1 = rotate(v1, -angle);
+            const vFinal2 = rotate(v2, -angle);
+
+            particle.velocity.x = vFinal1.x;
+            particle.velocity.y = vFinal1.y;
+
+            otherParticle.velocity.x = vFinal2.x;
+            otherParticle.velocity.y = vFinal2.y;
+        }
+    }
+
+
+
+    
+
+    class Bubble {
+        constructor(x, y, radius, sAngle, eAngle, coinName, coinPrice, coinImg, bubbleColor, coinImgSize) {
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+            this.sAngle = sAngle;
+            this.eAngle = eAngle;
+            this.coinName = coinName;
+            this.coinPrice = coinPrice;
+            this.coinImg = coinImg;
+            this.bubbleColor = bubbleColor;
+            this.mass = .5;
+            this.velocity = {
+                x: (Math.random() - 0.5) * 1,
+                y: (Math.random() - 0.5) * 1
+            };
+            this.coinImgSize = coinImgSize;
+
+
+        }
+        draw() {
+            context.beginPath();
+            context.strokeStyle = this.bubbleColor;
+            context.arc(this.x, this.y, this.radius, this.sAngle, this.eAngle);
+            context.stroke();
+        }
+
+        name() {
+            context.font = `${this.radius / 3}px serif`;
+            context.fillStyle = 'white';
+            context.textAlign = 'center'
+            context.fillText(this.coinName.toUpperCase(), this.x, this.y - this.radius / 2);
+        }
+        price() {
+
+            context.font = `${this.radius / 3.5}px serif`;
+            context.fillStyle = 'white';
+            context.fillText(this.coinPrice, this.x, this.y + this.radius / 1.2);
+        }
+        image() {
+            context.drawImage(this.coinImg, this.x - this.radius / 2, this.y - this.radius / 2, this.coinImgSize, this.coinImgSize)
+        }
+        update(coinsArr) {
+            this.draw()
+            this.name()
+            this.price()
+            this.image()
+
+            for (let i = 0; i < coinsArr.length; i++) {
+
+                if (this === coinsArr[i]) continue;
+                if (distance(this.x, this.y, coinsArr[i].x, coinsArr[i].y) - this.radius * 2 < 0) {
+
+                    resolveCollision(this, coinsArr[i])
+
+                }
+
+            }
+
+            if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+                this.velocity.x *= -1
+            }
+
+            if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+                this.velocity.y *= -1
+            }
+            this.x += this.velocity.x;
+            this.y += this.velocity.y
+
+        
+        }
+
+    }
 
     const coinImage = document.querySelectorAll('img')
     const coin = document.querySelector('.coin')
@@ -325,11 +454,16 @@ else if(window.document.location.pathname === '/canvas') {
     const purchaseFee= document.querySelectorAll('.purchase-fee')
     const purchasePrice = document.querySelectorAll('.purchase-price')
     const quantityPurchased = document.querySelectorAll('.quantity-purchased')
-
+    const holdingTotal = document.querySelectorAll('.holding-total')
 
     function getDifference(a,b) {
         return Math.abs(a-b)
     }
+
+    const coinsArr = []
+
+
+
     if(coinName.length > 0) {
     getCoins().then((res) => {
       
@@ -350,28 +484,73 @@ else if(window.document.location.pathname === '/canvas') {
 
 
                     let totalChange = ( currentCoinPrice - buyPrice) * quantity
-
+                    let totalHolding= price * quantity + totalChange
 
 
                     currentPrice[j].innerText =` $${currentCoinPrice.toLocaleString()}`
-                    
+
                     profitLoss[j].innerText =`$${totalChange.toLocaleString()}`
+
+                    holdingTotal[j].innerText = `($${totalHolding.toLocaleString()})`
 
                     if(totalChange > 0) {
                     profitLoss[j].style.color = 'green'
                     } 
                     else {
                     profitLoss[j].style.color = 'red'
-
                     }
 
-           
+
+                    if(res.data[i].name === coinName[j].innerText) {
+
+                        let myImage = new Image()
+                        myImage.src = `${res.data[i].image}`
+                        let radius = 50;
+                        let x = canvas.width /2;
+                        let y = canvas.height /2 
+                        let pi = 2 * Math.PI
+                        let sAngle = 0
+                        let coinNamee = res.data[i].name;
+                        let coinImg = myImage;
+                        let coinHoldings = `$${totalChange.toLocaleString()}`;
+                        let bubbleColor = totalChange > 0 ? 'green' : 'red';
+                        let coinImgSize = radius;
+
+
+            
+            
+                     coinsArr.push(new Bubble(x, y, radius, sAngle, pi,coinNamee, coinHoldings, coinImg, bubbleColor, coinImgSize))
+                        
+                    }
                 }
             }
         }
+    
+        
+        function animate() {
+            requestAnimationFrame(animate)
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            
+            coinsArr.forEach(coin => {
+                coin.update(coinsArr)
+            })
+
+
+        }
+        animate()
 
 
     })
+   
 }
   
+
+  
+
+
+
+
+
+
+
 }
