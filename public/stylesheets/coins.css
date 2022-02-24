@@ -31,21 +31,25 @@
     align-items: center;
     margin: 10px auto;
     width: 80%;
-    border-bottom: 3px solid grey;
     background-color: rgb(222, 222, 223);
 }
 
-.coin-info:last-of-type{
-    border-bottom: none;
-}
+
 
 .coin {
     display: flex;
     width: 20%;
+
 }
 
+
 .coin-buttons {
+    display: flex;
     margin-right: 5px;
+}
+
+.coin-buttons button {
+    margin: 5px;
 }
 .coin img {
     height: 30px;
