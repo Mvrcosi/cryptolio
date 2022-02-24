@@ -6,16 +6,18 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <a class="navbar-brand" href="#">Cryptolio</a>
-        </div>
         <div class="navbar-nav ml-auto">
         <% if(!currentUser) {%>
             <a class="nav-link" href='/login'>Login</a>
             <a class="nav-link" href='/register'>Register</a>
-            <% } else { %>`
+            <% } else { %>
             <a class="nav-link" href="/logout">Logout</a>
             <%}%>
         </div>
+</div>
+
     </div>
+
 </nav>
 
 
@@ -56,7 +58,7 @@
                             </div>
                     </div>
 
-                    <label for="quantityPurchased" class="form-label">Fee</label>
+                    <label for="purchaseFee" class="form-label">Fee</label>
                     <div class="input-group mb-3">
                         <span class="input-group-text">$</span>
                         <input type="text" class="form-control" placeholder="0.00"

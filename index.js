@@ -87,8 +87,8 @@ app.post('/register', async (req, res, next) => {
         req.flash('success', 'Welcome to cryptolio')
         res.redirect('/canvas')
     })
-    
 })
+
 
 app.get('/login', (req, res) => {
     res.render('users/login')
@@ -108,14 +108,11 @@ app.get("/logout", (req,res) => {
 
 
 app.get('/canvas', isLoggedIn, async(req, res) => {
-
     const getUser = await User.findById(req.user._id)
+
+
     res.render('coins/canvas' , {getUser})
-    
-    
-
 })
-
 
 
 app.post('/canvas', isLoggedIn, catchAsync(async(req, res) => {
@@ -126,6 +123,14 @@ app.post('/canvas', isLoggedIn, catchAsync(async(req, res) => {
         user.save()
        res.redirect('/canvas')
 }))
+
+app.delete('/canvas/:id', async(req,res) => {
+    
+    const userFound = await User.findByIdAndUpdate(req.user._id, {
+        $pull: {transactions: {_id: req.params.id}}
+    })
+    res.redirect('/canvas')
+})
 
 
 
