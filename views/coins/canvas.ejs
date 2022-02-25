@@ -61,7 +61,6 @@
                 </div>
 
             <div class="coin-buttons">
-                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#editModal">EDIT</button>
                 <form action="/canvas/<%= getUser.transactions[i].id %>?_method=DELETE" method="POST">
                     <button class="btn btn-danger">DELETE</button>
                 </form>
@@ -91,55 +90,6 @@
 
 
   
-  <!-- EDIT MODAL -->
-  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Editing</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form action="/canvas/" method="POST"  novalidate class='validated-form'>
-                <label for="coinList" class="form-label">Choose Coin</label>
-                <input class="form-control" list="datalistOptions" id="coinList" placeholder="Type to search..."
-                    name="coinName" required>
-                 
-                <datalist id="datalistOptions">
-                </datalist>
-
-                <label for="quantityPurchased" class="form-label">Quantity Purchased</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">0.00</span>
-                    <input type="text" class="form-control" id="quanitity" name="quantityPurchased">
-                    
-                </div>
-
-                <label for="purchasePrice" class="form-label">Purchase Price</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">$</span>
-                    <input type="text" class="form-control" placeholder="0.00"
-                        aria-label="Amount (to the nearest dollar)" id="purchasePrice" name="purchasePrice">
-                     
-                </div>
-
-                <label for="purchaseFee" class="form-label">Fee</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">$</span>
-                    <input type="text" class="form-control" placeholder="0.00"
-                        aria-label="Amount (to the nearest dollar)" id="purchaseFee" name="purchaseFee">
-                </div>
-        <button type="submit" class="btn btn-primary ml-auto" data-bs-dismiss="modal">Add Transaction</button>
-                
-            </form>
-
-        </div>
-
-
-       
-      </div>
-    </div>
-  </div>
 
 
 <% } %>

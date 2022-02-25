@@ -46,7 +46,7 @@ router.get("/logout", isLoggedIn, (req,res) => {
 
 router.get('/canvas', isLoggedIn, async(req, res) => {
     const getUser = await User.findById(req.user._id)
-    res.render('coins/canvas', {getUser})
+    res.render('coins/canvas', {getUser, })
 })
 
 
@@ -57,6 +57,7 @@ router.post('/canvas', isLoggedIn, catchAsync(async(req, res) => {
         const user = await User.findById(req.user._id)
         user.transactions.push(newCoin)
         user.save()
+        req.flash("succees", "Successfully added a transaction")
        res.redirect('/canvas')
         } catch (err) {
             next(err)
