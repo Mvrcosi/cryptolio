@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose')
-const dotenv = require('dotenv')
+const dotenv = require('dotenv').config()
 const ejsMate = require('ejs-mate')
 const methodOverride = require('method-override')
 const passport = require('passport')
@@ -17,34 +17,23 @@ const User = require('./models/user')
 const { isLoggedIn } = require('./middleware')
 const catchAsync = require('./utils/catchAsync.js')
 const MongoStore = require('connect-mongo')(session)
-const secret = process.env.SECRET
 
 
 const store = new MongoStore({
-    mongooseConnection: mongoose.connection,
-    secret: secret,
-    touchAfter: 24 * 60 * 60,
-    saveUninitialized: false,
-})
+    url: process.env.CONNECTION_URL,
+    secret: process.env.SESSION_SECRET,
+    touchAfter: 24*60*60,
 
-store.on('error', (e) => {
-    console.log('sesssion', e)
 })
 
 const sessionOptions = { 
-    secret: secret, 
+    store,
+    secret: process.env.SESSION_SECRET,
     resave: false,
-     saveUninitialized: false ,
-     cookie: {
-         httpOnly: true,
-         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-         maxAge: 1000 * 60 * 60 * 24 * 7,
-     }
+    saveUninitialized: false,
+
 }
 
-
-
-dotenv.config()
 const PORT = process.env.PORT || 5000;
 
 app.engine('ejs', ejsMate)
@@ -77,7 +66,7 @@ app.use((req,res,next) => {
 
 const users = require('./routes/users')
 
-mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('connected to DB')
     }).catch((err) => {
@@ -91,8 +80,6 @@ app.use("/", users)
 app.get('/', (req, res) => {
     res.render('home')
 })
-
-
 
 app.all('*', (req,res,next) => {
     next(new ExpressError('Page Not Found', 404))
