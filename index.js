@@ -16,9 +16,16 @@ const Joi = require('joi')
 const User = require('./models/user')
 const { isLoggedIn } = require('./middleware')
 const catchAsync = require('./utils/catchAsync.js')
+const MongoStore = require('connect-mongo')(session)
 
 
 
+
+const sessionOptions = { 
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}
 
 const PORT = process.env.PORT || 5000;
 
