@@ -16,11 +16,23 @@ const Joi = require('joi')
 const User = require('./models/user')
 const { isLoggedIn } = require('./middleware')
 const catchAsync = require('./utils/catchAsync.js')
+const MongoStore = require('connect-mongo')(session)
+const secret = process.env.SECRET
 
 
+const store = new MongoStore({
+    mongooseConnection: mongoose.connection,
+    secret: secret,
+    touchAfter: 24 * 60 * 60,
+    saveUninitialized: false,
+})
+
+store.on('error', (e) => {
+    console.log('sesssion', e)
+})
 
 const sessionOptions = { 
-    secret: "secret", 
+    secret: secret, 
     resave: false,
      saveUninitialized: false ,
      cookie: {
@@ -65,7 +77,7 @@ app.use((req,res,next) => {
 
 const users = require('./routes/users')
 
-mongoose.connect(process.env.CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('connected to DB')
     }).catch((err) => {
