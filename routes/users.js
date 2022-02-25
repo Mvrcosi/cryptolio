@@ -1,22 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
-const Coin = require('../models/coin')
 const passport = require('passport')
 const Localstrategy = require('passport-local')
 const { isLoggedIn } = require('../middleware')
 const catchAsync = require('../utils/catchAsync.js')
 
 
-
-
 router.get('/register', async (req, res) => {
-
     res.render('users/register')
-
 })
 
 router.post('/register', async (req, res, next) => {
+    try {
     const { email, username, password } = req.body
     const user = new User({ email, username })
     const registeredUser = await User.register(user, password);
@@ -25,8 +21,11 @@ router.post('/register', async (req, res, next) => {
         req.flash('success', 'Welcome to cryptolio')
         res.redirect('/canvas')
     })
-    
+        } catch (err) {
+            next(err)
+        }
 })
+
 
 router.get('/login', (req, res) => {
     res.render('users/login')
@@ -38,7 +37,7 @@ router.post('/login', passport.authenticate('local', { failureFlash: true, failu
 
 })
 
-router.get("/logout", (req,res) => {
+router.get("/logout", isLoggedIn, (req,res) => {
     req.logOut();
     res.redirect('/')
 
@@ -46,18 +45,34 @@ router.get("/logout", (req,res) => {
 
 
 router.get('/canvas', isLoggedIn, async(req, res) => {
-    const coins = await Coin.find({})
-    res.render('coins/canvas', {coins})
+    const getUser = await User.findById(req.user._id)
+    res.render('coins/canvas', {getUser})
 })
 
 
-
-router.post('/canvas', catchAsync(async(req, res) => {
+router.post('/canvas', isLoggedIn, catchAsync(async(req, res) => {
+        try {
         const { coinName, quantityPurchased, purchasePrice, purchaseFee } = req.body
-        const coin = new Coin({ coinName, quantityPurchased, purchasePrice, purchaseFee })
-        coin.save()
-        res.redirect('/canvas')
+        const newCoin = {coinName, quantityPurchased, purchasePrice, purchaseFee}
+        const user = await User.findById(req.user._id)
+        user.transactions.push(newCoin)
+        user.save()
+       res.redirect('/canvas')
+        } catch (err) {
+            next(err)
+        }
 }))
+
+router.delete('/canvas/:id', isLoggedIn, async(req,res) => {
+    try {
+    const userFound = await User.findByIdAndUpdate(req.user._id, {
+        $pull: {transactions: {_id: req.params.id}}
+    })
+    res.redirect('/canvas')
+    } catch (err) {
+        next(err)
+    }
+})
 
 
 
